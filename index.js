@@ -24,8 +24,24 @@ server.get('/', (req, res) => {
     res.status(200).json({ api: 'running!' });
 });
 
+server.post('/api/users', (req, res) => {
+    if (!req.body.name || !req.body.bio){
+        res.status(400).json({ message: "New user requires 'name' and 'bio' properties."});
+    } else {
+        let newUser = {
+            id: shortid.generate(),
+            name: req.body.name,
+            bio: req.body.bio
+        }
+        users.push(newUser);
+        res.status(201).json(newUser);
+    }
+})
+
 // GET all users as array
 server.get('/api/users', (req, res) => {
+    // if error retrieving:
+    // res.status(500).json({ message: "The users' information could not be retrieved."});
     res.status(200).json(users);
 })
 
